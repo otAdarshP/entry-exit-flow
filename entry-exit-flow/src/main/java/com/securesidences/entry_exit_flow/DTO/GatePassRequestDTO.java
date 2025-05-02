@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Entity
 public class GatePassRequestDTO {
     @NotBlank
     private String visitReason;
@@ -21,15 +20,42 @@ public class GatePassRequestDTO {
     @NotNull
     private LocalDate returnTime;
 
-    public String getVisitReasion() {
+    public GatePassRequestDTO(String visitReason, String emergencyContact, LocalDate leaveTime, LocalDate returnTime) {
+        this.visitReason = visitReason;
+        this.emergencyContact = emergencyContact;
+        this.leaveTime = leaveTime;
+        this.returnTime = returnTime;
     }
 
-    public LocalDate getLeaveTime() {
+    public String getVisitReason() {
+        return visitReason;
     }
 
-    public LocalDate getReturnTime() {
+    public void setVisitReason(String visitReason) {
+        this.visitReason = visitReason;
     }
 
     public String getEmergencyContact() {
+        return emergencyContact;
+    }
+
+    public void setEmergencyContact(String emergencyContact) {
+        this.emergencyContact = emergencyContact;
+    }
+
+    public LocalDate getLeaveTime() {
+        return leaveTime;
+    }
+
+    public void setLeaveTime(LocalDate leaveTime) {
+        this.leaveTime = leaveTime;
+    }
+
+    public LocalDate getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(LocalDate returnTime) {
+        this.returnTime = returnTime;
     }
 }

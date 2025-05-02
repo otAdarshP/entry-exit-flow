@@ -19,6 +19,8 @@ import java.util.Optional;
 @Service
 public class ResidentServiceImpl implements ResidentService{
 
+    private final EmailService emailService;
+
     @Autowired
     private ResidentRepository residentRepository;
     private long nextId =1L;
@@ -51,13 +53,17 @@ public class ResidentServiceImpl implements ResidentService{
         return residentRepository.save(existing);
     }
 
+    public ResidentServiceImpl(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
     @Override
     public Resident createGatePass(GatePassRequestDTO dto, String username) {
         Resident resident = residentRepository.findByResidentName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Resident not found."));
 
 //        mapping updates
-        resident.setVisitReason(dto.getVisitReasion());
+        resident.setVisitReason(dto.getVisitReason());
         resident.setGatePassStatus("Pending");
         resident.setLeaveTime(dto.getLeaveTime());
         resident.setReturnTime(dto.getReturnTime());
