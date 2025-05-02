@@ -9,8 +9,8 @@ public interface ResidentService {
 
     void createResident(Resident resident);
     List<Resident> allResidents();
-
     String deleteResident (Long residentId);
-
     Resident updateResident (Resident updateResident, Long residentId);
+
+
 }
