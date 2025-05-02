@@ -4,7 +4,6 @@ import com.securesidences.entry_exit_flow.DTO.GatePassRequestDTO;
 import com.securesidences.entry_exit_flow.Model.Resident;
 import com.securesidences.entry_exit_flow.Repository.ResidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ResidentServiceImpl implements ResidentService{
@@ -58,8 +55,8 @@ public class ResidentServiceImpl implements ResidentService{
     }
 
     @Override
-    public Resident createGatePass(GatePassRequestDTO dto, String username) {
-        Resident resident = residentRepository.findByResidentName(username)
+    public Resident createGatePass(GatePassRequestDTO dto, String residentEmail) {
+        Resident resident = residentRepository.findByResidentName(residentEmail) // add username to email place after security config
                 .orElseThrow(() -> new UsernameNotFoundException("Resident not found."));
 
 //        mapping updates

@@ -38,12 +38,14 @@ public class Resident {
     private String guardianPhoneNo;
     @Column(nullable = false)
     private String gatePassStatus = "Pending";
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private LocalDate approvalDecisionTime;
+    @Column(unique = true, nullable = false)
+    private String residentEmail;
 
 
 
-    public Resident(Long residentId, String residentName, String visitReason, String emergencyContact, LocalDate returnTime, LocalDate leaveTime, String guardianEmail, String guardianPhoneNo, String gatePassStatus, LocalDate approvalDecisionTime){
+    public Resident(Long residentId, String residentName, String visitReason, String emergencyContact, LocalDate returnTime, LocalDate leaveTime, String guardianEmail, String guardianPhoneNo, String gatePassStatus, LocalDate approvalDecisionTime, String residentEmail){
         this.residentId = residentId;
         this.residentName = residentName;
         this.visitReason = visitReason;
@@ -54,6 +56,7 @@ public class Resident {
         this.guardianPhoneNo = guardianPhoneNo;
         this.gatePassStatus = gatePassStatus;
         this.approvalDecisionTime = approvalDecisionTime;
+        this.residentEmail = residentEmail;
     }
 
     public String getResidentName() {
@@ -124,6 +127,18 @@ public class Resident {
     }
     public void setApprovalDecisionTime(LocalDate approvalDecisionTime) {
         this.approvalDecisionTime = approvalDecisionTime;
+    }
+
+    public Resident(String residentEmail){
+        this.residentEmail = residentEmail;
+    }
+
+    public String getResidentEmail() {
+        return residentEmail;
+    }
+
+    public void setResidentEmail(String residentEmail) {
+        this.residentEmail = residentEmail;
     }
 
     public Resident(){

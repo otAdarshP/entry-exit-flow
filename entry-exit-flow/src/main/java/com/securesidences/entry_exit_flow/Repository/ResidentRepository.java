@@ -9,5 +9,7 @@ public interface ResidentRepository extends JpaRepository <Resident, Long> {
 
     Optional<Resident> findByResidentId (Long Id);
     Optional<Resident> findByResidentName (String name);
+    Optional<Resident> findByResidentEmail(String email);
+
 
 }
