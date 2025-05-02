@@ -1,12 +1,17 @@
 package com.securesidences.entry_exit_flow.Service;
 
+import com.securesidences.entry_exit_flow.DTO.GatePassRequestDTO;
 import com.securesidences.entry_exit_flow.Model.Resident;
 import com.securesidences.entry_exit_flow.Repository.ResidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,5 +49,39 @@ public class ResidentServiceImpl implements ResidentService{
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found."));
         existing.setResidentName(updateResident.getResidentName());
         return residentRepository.save(existing);
+    }
+
+    @Override
+    public Resident createGatePass(GatePassRequestDTO dto, String username) {
+        Resident resident = residentRepository.findByResidentName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Resident not found."));
+
+//        mapping updates
+        resident.setVisitReason(dto.getVisitReasion());
+        resident.setGatePassStatus("Pending");
+        resident.setLeaveTime(dto.getLeaveTime());
+        resident.setReturnTime(dto.getReturnTime());
+        resident.setEmergencyContact(dto.getEmergencyContact());
+
+        residentRepository.save(resident);
+
+        emailService.sendApprovalMail(resident);
+        return resident;
+    }
+
+    @Override
+    public Resident updateGatePassStatus(Long residentId, String decision) {
+        Resident resident = residentRepository.findByResidentId(residentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Resident not found with resident id: " + residentId));
+
+        if (!decision.equalsIgnoreCase("Approved") && !decision.equalsIgnoreCase("Not approved")){
+            throw new IllegalArgumentException("Decision not accepted by the system, please choose from the given two.");
+        }
+
+        resident.setGatePassStatus(decision);
+        resident.setApprovalDecisionTime(LocalDate.from(LocalDateTime.now()));
+
+        return residentRepository.save(resident);
+
     }
 }

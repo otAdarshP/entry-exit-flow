@@ -20,5 +20,16 @@ public class GatePassRequestDTO {
     @Future
     @NotNull
     private LocalDate returnTime;
-    
+
+    public String getVisitReasion() {
+    }
+
+    public LocalDate getLeaveTime() {
+    }
+
+    public LocalDate getReturnTime() {
+    }
+
+    public String getEmergencyContact() {
+    }
 }

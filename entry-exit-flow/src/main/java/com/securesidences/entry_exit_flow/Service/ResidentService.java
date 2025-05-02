@@ -1,5 +1,6 @@
 package com.securesidences.entry_exit_flow.Service;
 
+import com.securesidences.entry_exit_flow.DTO.GatePassRequestDTO;
 import com.securesidences.entry_exit_flow.Model.Resident;
 
 import java.util.ArrayList;
@@ -12,5 +13,7 @@ public interface ResidentService {
     String deleteResident (Long residentId);
     Resident updateResident (Resident updateResident, Long residentId);
 
+    Resident createGatePass (GatePassRequestDTO dto, String username); // the unique information given during sign-in to the Spring Security.
+    Resident updateGatePassStatus (Long residentId, String decision);
 
 }
