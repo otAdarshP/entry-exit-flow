@@ -10,6 +10,7 @@ public class Resident {
     @Id
     private Long residentId;
     private String residentName;
+    
 
 
     public Resident(){
