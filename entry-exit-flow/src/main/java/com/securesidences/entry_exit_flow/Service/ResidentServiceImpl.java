@@ -34,7 +34,7 @@ public class ResidentServiceImpl implements ResidentService{
 
     @Override
     public String deleteResident(Long residentId) {
-        Resident resident = residentRepository.findById(residentId)
+        Resident resident = residentRepository.findByResidentId(residentId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resident ID not found"));
 
         residentRepository.delete(resident);
@@ -56,7 +56,7 @@ public class ResidentServiceImpl implements ResidentService{
 
     @Override
     public Resident createGatePass(GatePassRequestDTO dto, String residentEmail) {
-        Resident resident = residentRepository.findByResidentName(residentEmail) // add username to email place after security config
+        Resident resident = residentRepository.findByResidentEmail(residentEmail) // add username to email place after security config
                 .orElseThrow(() -> new UsernameNotFoundException("Resident not found."));
 
 //        mapping updates
