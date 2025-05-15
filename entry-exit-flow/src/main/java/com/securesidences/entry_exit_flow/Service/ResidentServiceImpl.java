@@ -77,14 +77,16 @@ public class ResidentServiceImpl implements ResidentService{
         Resident resident = residentRepository.findByResidentId(residentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Resident not found with resident id: " + residentId));
 
-        if (!decision.equalsIgnoreCase("Approved") && !decision.equalsIgnoreCase("Not approved")){
+        if (!decision.equalsIgnoreCase("Approved") && !decision.equalsIgnoreCase("Not approved")) {
             throw new IllegalArgumentException("Decision not accepted by the system, please choose from the given two.");
         }
 
         resident.setGatePassStatus(decision);
         resident.setApprovalDecisionTime(LocalDate.from(LocalDateTime.now()));
 
-        return residentRepository.save(resident);
-
+        Resident updated = residentRepository.save(resident);
+        // notify the resident
+        emailService.sendDecisionMail(updated);
+        return updated;
     }
 }

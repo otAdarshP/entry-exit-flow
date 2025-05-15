@@ -1,6 +1,7 @@
 package com.securesidences.entry_exit_flow.Controller;
 
 
+import com.securesidences.entry_exit_flow.DTO.GatePassDecisionDTO;
 import com.securesidences.entry_exit_flow.DTO.GatePassRequestDTO;
 import com.securesidences.entry_exit_flow.Model.Resident;
 import com.securesidences.entry_exit_flow.Service.ResidentService;
@@ -20,6 +21,17 @@ public class ResidentController {
     @Autowired
     private ResidentService residentService;
 
+    @GetMapping("/api/public/resident/{residentId}")
+    public ResponseEntity<Resident> getResident(@PathVariable Long residentId) {
+        Resident resident = residentService
+                .allResidents()
+                .stream()
+                .filter(r -> r.getResidentId().equals(residentId))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resident not found"));
+        return ResponseEntity.ok(resident);
+    }
+
     @GetMapping("/api/public/residents")
     public ResponseEntity<List<Resident>> allResidents(){
         List<Resident> residents = residentService.allResidents();
@@ -32,7 +44,7 @@ public class ResidentController {
         return new ResponseEntity<>("Resident added successfully!", HttpStatus.CREATED);
     }
 
-    @DeleteMapping("api/admin/resident/{residentId}")
+    @DeleteMapping("/api/admin/resident/{residentId}")
     public ResponseEntity<String> deleteResident(@PathVariable Long residentId){
         try {
             String status = residentService.deleteResident(residentId);
@@ -52,6 +64,22 @@ public class ResidentController {
         catch (ResponseStatusException exception){
             return new ResponseEntity<>(exception.getReason(), exception.getStatusCode());
         }
+    }
+
+    @GetMapping("/api/approve/{residentId}")
+    public ResponseEntity<GatePassDecisionDTO> approveViaEmail(
+            @PathVariable Long residentId,
+            @RequestParam("decision") String decision) {
+
+        // 1) update the status and get the saved entity
+        Resident updated = residentService.updateGatePassStatus(residentId, decision);
+
+        // 3) build and return only the two fields
+        GatePassDecisionDTO dto = new GatePassDecisionDTO(
+                updated.getGatePassStatus(),
+                updated.getApprovalDecisionTime()
+        );
+        return ResponseEntity.ok(dto);
     }
 
 
