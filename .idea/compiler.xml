@@ -6,13 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="entry-exit-flow" />
+        <module name="entry_exit_flow" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="entry-exit-flow" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="entry-exit-flow" options="-parameters" />
+      <module name="entry_exit_flow" options="-parameters" />
     </option>
   </component>
 </project>
