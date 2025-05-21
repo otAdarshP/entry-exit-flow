@@ -2,9 +2,11 @@ package com.securesidences.entry_exit_flow.Controller;
 
 
 import com.securesidences.entry_exit_flow.DTO.GatePassDecisionDTO;
+import com.securesidences.entry_exit_flow.DTO.GatePassOverviewDTO;
 import com.securesidences.entry_exit_flow.DTO.GatePassRequestDTO;
 import com.securesidences.entry_exit_flow.Model.Resident;
 import com.securesidences.entry_exit_flow.Service.ResidentService;
+import com.securesidences.entry_exit_flow.Service.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "*") // specify "http://localhost:19006" for React Native
 @RestController
 public class ResidentController {
 
@@ -109,5 +112,42 @@ public class ResidentController {
         residentService.updateGatePassStatus(residentId, decision);
         return ResponseEntity.ok("Gate pass has been: " + decision);
     }
+
+    /**
+     * Resident view: their current gate-pass status
+     */
+    @GetMapping("/api/resident/history")
+    public ResponseEntity<GatePassOverviewDTO> getMyGatePass(
+            @RequestParam("email") String residentEmail) {
+        Resident r = residentService.findByEmail(residentEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Resident not found"));
+        GatePassOverviewDTO dto = new GatePassOverviewDTO(
+                r.getResidentId(),
+                r.getResidentName(),
+                r.getLeaveTime(),
+                r.getReturnTime(),
+                r.getGatePassStatus(),
+                r.getGuardianEmail());
+        return ResponseEntity.ok(dto);
+    }
+
+    /**
+     * Warden view: all gate-pass requests
+     */
+    @GetMapping("/api/admin/gatepasses")
+    public ResponseEntity<List<GatePassOverviewDTO>> getAllGatePasses() {
+        List<GatePassOverviewDTO> list = residentService.allResidents().stream()
+                .map(r -> new GatePassOverviewDTO(
+                        r.getResidentId(),
+                        r.getResidentName(),
+                        r.getLeaveTime(),
+                        r.getReturnTime(),
+                        r.getGatePassStatus(),
+                        r.getGuardianEmail()))
+                .toList();
+        return ResponseEntity.ok(list);
+    }
+
+
 
 }

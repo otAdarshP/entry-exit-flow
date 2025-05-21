@@ -5,6 +5,7 @@ import com.securesidences.entry_exit_flow.Model.Resident;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface ResidentService {
 
@@ -15,5 +16,5 @@ public interface ResidentService {
 
     Resident createGatePass (GatePassRequestDTO dto, String username); // the unique information given during sign-in to the Spring Security.
     Resident updateGatePassStatus (Long residentId, String decision);
-
+    Optional<Resident> findByEmail(String email);
 }

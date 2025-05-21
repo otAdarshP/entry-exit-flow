@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class ResidentServiceImpl implements ResidentService{
@@ -41,6 +42,10 @@ public class ResidentServiceImpl implements ResidentService{
         return "Resident with resident ID " + residentId + " deleted successfully!";
     }
 
+    @Override
+    public Optional<Resident> findByEmail(String email) {
+        return residentRepository.findByResidentEmail(email);
+    }
 
     @Override
     public Resident updateResident(Resident updateResident, Long residentId) {
