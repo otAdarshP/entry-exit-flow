@@ -89,13 +89,23 @@ public class ResidentController {
 //    gatepass APIs
 
 //    @PostMapping("/api/resident/gatepass")
-//    public ResponseEntity<String> generateGatepPass (@RequestBody @Valid GatePassRequestDTO dto){ // add @Valid when DTO are fixed
+//    public ResponseEntity<String> generateGatePass (@RequestBody @Valid GatePassRequestDTO dto){ // add @Valid when DTO are fixed
 //        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 //        Resident saved = residentService.createGatePass(dto, username);
 //        return ResponseEntity.status(HttpStatus.CREATED).body("Gate pass has been generated and sent for approval.");
 //    }
 
     // TEMPORARILY: Accept email directly from request instead of relying on login
+//    @PostMapping("/api/resident/gatepass")
+//    public ResponseEntity<String> generateGatePass(
+//            @RequestParam("residentEmail") String residentEmail,
+//            @RequestBody @Valid GatePassRequestDTO dto) {
+//
+//        Resident saved = residentService.createGatePass(dto, residentEmail);
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body("Gate pass has been generated and sent for approval.");
+//    }
+
     @PostMapping("/api/resident/gatepass")
     public ResponseEntity<String> generateGatePass(
             @RequestParam("residentEmail") String residentEmail,
