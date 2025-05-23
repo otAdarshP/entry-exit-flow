@@ -95,7 +95,7 @@ public class ResidentController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body("Gate pass has been generated and sent for approval.");
 //    }
 
-    // TEMP: Accept email directly from request instead of relying on login
+    // TEMPORARILY: Accept email directly from request instead of relying on login
     @PostMapping("/api/resident/gatepass")
     public ResponseEntity<String> generateGatePass(
             @RequestParam("residentEmail") String residentEmail,
@@ -147,7 +147,4 @@ public class ResidentController {
                 .toList();
         return ResponseEntity.ok(list);
     }
-
-
-
 }
