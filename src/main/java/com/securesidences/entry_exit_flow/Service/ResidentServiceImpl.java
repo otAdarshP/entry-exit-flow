@@ -37,7 +37,6 @@ public class ResidentServiceImpl implements ResidentService{
     public String deleteResident(Long residentId) {
         Resident resident = residentRepository.findByResidentId(residentId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resident ID not found"));
-
         residentRepository.delete(resident);
         return "Resident with resident ID " + residentId + " deleted successfully!";
     }
